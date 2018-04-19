@@ -4,7 +4,9 @@ import requests
 from io import open as iopen
 import os
 import time
-from ./secrets import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, TOKEN_SECRET
+from secrets import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, TOKEN_SECRET
+import sys
+
 
 # this method was adapted minorly from one written by Peter Hanley
 # https://coderwall.com/p/lngdkg/saving-images-with-just-requests-http-for-humans
@@ -23,12 +25,6 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, TOKEN_SECRET)
 api = tweepy.API(auth)
 
-twitter_handles = [
-# your list of twitter handles to harvest for pics goes here
-# "twitterUsername1",
-# "twitterUsername2",
-#  etc.
-]
 def get_images(twitter_handle):
     if not os.path.exists(twitter_handle):
         os.makedirs(twitter_handle)
@@ -69,10 +65,12 @@ def get_images(twitter_handle):
 
 
 if __name__ == "__main__":
+    twitter_handles = sys.argv[1:]
     if not os.path.exists('pics'):
         os.makedirs('pics')
     os.chdir('pics')
 
     for t in twitter_handles:
+        print("Scraping pics from user @{}".format(t))
         get_images(t)
         time.sleep(300)  # 5min between scrapes to prevent API rate limit issues
