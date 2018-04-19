@@ -47,7 +47,7 @@ def get_images(twitter_handle):
                         print(picture['media_url_https'])
                         urls += [picture['media_url_https']]
     except:
-        print("Rate limit exceed! Saving found photos...")
+        print("Rate limit exceeded! Saving found photos...")
     ctr = 1
     err_ctr = 0
     length = len(urls)
