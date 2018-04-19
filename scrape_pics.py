@@ -5,6 +5,9 @@ from io import open as iopen
 import os
 import time
 from ./secrets import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, TOKEN_SECRET
+
+# this method was adapted minorly from one written by Peter Hanley
+# https://coderwall.com/p/lngdkg/saving-images-with-just-requests-http-for-humans
 def save_img_from_url(file_url):
     suffix_list = ['jpg', 'gif', 'png', 'tif', 'svg',]
     file_name =  file_url.split('/')[-1]
@@ -22,11 +25,11 @@ api = tweepy.API(auth)
 
 twitter_handles = [
 # your list of twitter handles to harvest for pics goes here
+# "twitterUsername1",
+# "twitterUsername2",
+#  etc.
 ]
 def get_images(twitter_handle):
-    if not os.path.exists('pics'):
-        os.makedirs('pics')
-    os.chdir('pics')
     if not os.path.exists(twitter_handle):
         os.makedirs(twitter_handle)
         print("Created directory ./{}.".format(twitter_handle))
@@ -62,10 +65,14 @@ def get_images(twitter_handle):
         ctr += 1
 
     print("Total errors: {}".format(err_ctr))
-    os.chdir('../..')
+    os.chdir('..') # return to the top level
 
 
+if __name__ == "__main__":
+    if not os.path.exists('pics'):
+        os.makedirs('pics')
+    os.chdir('pics')
 
-for t in twitter_handles:
-    get_images(t)
-    time.sleep(450)  # 7.5min, or two accounts per 15min
+    for t in twitter_handles:
+        get_images(t)
+        time.sleep(300)  # 5min between scrapes to prevent API rate limit issues
